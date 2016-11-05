@@ -44,6 +44,7 @@ $CFG->dbhost    = getenv('DB_PORT_3306_TCP_ADDR');  // eg 'localhost' or 'db.isp
 $CFG->dbname    = getenv('DB_ENV_MYSQL_DATABASE');     // database name, eg moodle
 $CFG->dbuser    = getenv('DB_ENV_MYSQL_USER');   // your database username
 $CFG->dbpass    = getenv('DB_ENV_MYSQL_PASSWORD');   // your database password
+
 $CFG->prefix    = 'mdl_';       // prefix to use for all table names
 $CFG->dboptions = array(
     'dbpersist' => false,       // should persistent database connections be
