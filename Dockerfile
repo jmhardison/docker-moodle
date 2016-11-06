@@ -1,7 +1,7 @@
 # Dockerfile for moodle instance.
 # Forked from Jonathan Hardison's <jmh@jonathanhardison.com> docker version. https://github.com/jmhardison/docker-moodle
 
-FROM ubuntu:16.04
+FROM  php:7.0-apache
 MAINTAINER Dimitrios Desyllas <ddesyllas@freemail.gr>
 #Original Maintainer Jon Auer <jda@coldshore.com>
 
@@ -19,6 +19,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV MOODLE_URL http://0.0.0.0
 ENV MOODLE_ADMIN admin
 ENV MOODLE_ADMIN_PASSWORD Admin~1234
+ENV MOODLE_ADMIN_EMAIL admin@example.com
 
 ADD ./entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
@@ -26,25 +27,32 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 
 RUN echo "Installing php and external tools"
 RUN apt-get update && \
-	apt-get -y install mysql-client pwgen python-setuptools curl git unzip apache2 php \
-		php-gd libapache2-mod-php postfix wget supervisor php-pgsql curl libcurl3 \
-		libcurl3-dev php-curl php-xmlrpc php-intl php-mysql git-core php-xml php-mbstring php-zip php-soap
+	apt-get -f -y install pwgen git unzip wget libxmlrpc-c++8-dev libxml2-dev libpng-dev libicu-dev libmcrypt-dev
 
-RUN echo "Installing moodle"
-RUN	rm /var/www/html/index.html && \
-    cd /tmp && \
-	  git clone -b MOODLE_31_STABLE git://git.moodle.org/moodle.git --depth=1 && \
-	  mv /tmp/moodle/* /var/www/html/
+RUN docker-php-ext-install pdo_mysql
+RUN docker-php-ext-install xmlrpc
+RUN docker-php-ext-install mbstring
+RUN docker-php-ext-install zip
+RUN docker-php-ext-install xml
+RUN docker-php-ext-install intl
+RUN docker-php-ext-install soap
+RUN docker-php-ext-install mcrypt
+
+RUN	echo "Installing moodle" && \
+		rm -rf /var/www/html/index.html && \
+		mkdir /tmp/moodle && \
+		git clone -b MOODLE_31_STABLE git://git.moodle.org/moodle.git --depth=1 /tmp/moodle  && \
+		mv /tmp/moodle/* /var/www/html/
 
 COPY moodle-config.php /var/www/html/config.php
 
-# Enable SSL, moodle requires it
-# if using proxy, don't need actually secure connection
-#RUN a2enmod ssl && a2ensite default-ssl
+
+RUN echo "Fixing Permissions" && \
+ 		chown -R www-data:www-data /var/www/html && \
+		find /var/www/html -iname "*.php" | xargs chmod +x
 
 # Cleanup
 RUN apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/lib/dpkg/* /var/lib/cache/* /var/lib/log/*
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-CMD source /etc/apache2/envvars && \
- 		apache2 -D FOREGROUND
+CMD "apache -D FOREGROUND"
