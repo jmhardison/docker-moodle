@@ -27,8 +27,9 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 
 RUN echo "Installing php and external tools"
 RUN apt-get update && \
-		apt-get -f -y install pwgen aspell unzip wget libxmlrpc-c++8-dev libxml2-dev libpng-dev libicu-dev libmcrypt-dev &&\
-		docker-php-ext-install pdo_mysql && \
+		apt-get -f -y install mysql-client pwgen aspell unzip wget libxmlrpc-c++8-dev libxml2-dev libpng-dev libicu-dev libmcrypt-dev &&\
+		docker-php-ext-install mysqli && \
+		docker-php-ext-install pdo pdo_mysql && \
  		docker-php-ext-install xmlrpc && \
 		docker-php-ext-install mbstring && \
 		docker-php-ext-install zip && \
@@ -36,6 +37,7 @@ RUN apt-get update && \
 		docker-php-ext-install intl && \
  		docker-php-ext-install soap && \
  		docker-php-ext-install mcrypt && \
+		docker-php-ext-install gd && \
 		echo "Installing moodle" && \
 		wget https://download.moodle.org/download.php/direct/stable31/moodle-latest-31.tgz -O /tmp/moodle-latest-31.tgz  && \
 		rm -rf /var/www/html/index.html && \
