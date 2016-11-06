@@ -2,6 +2,9 @@
 
 echo "Fixing files and permissions"
 
+chown -R www-data:www-data /var/www/html
+find /var/www/html -iname "*.php" | xargs chmod +x
+
 echo "placeholder" > /var/moodledata/placeholder
 chown -R www-data:www-data /var/moodledata
 chmod 777 /var/moodledata

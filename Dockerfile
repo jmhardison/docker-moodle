@@ -27,32 +27,26 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 
 RUN echo "Installing php and external tools"
 RUN apt-get update && \
-	apt-get -f -y install pwgen git unzip wget libxmlrpc-c++8-dev libxml2-dev libpng-dev libicu-dev libmcrypt-dev
-
-RUN docker-php-ext-install pdo_mysql
-RUN docker-php-ext-install xmlrpc
-RUN docker-php-ext-install mbstring
-RUN docker-php-ext-install zip
-RUN docker-php-ext-install xml
-RUN docker-php-ext-install intl
-RUN docker-php-ext-install soap
-RUN docker-php-ext-install mcrypt
-
-RUN	echo "Installing moodle" && \
+		apt-get -f -y install pwgen aspell unzip wget libxmlrpc-c++8-dev libxml2-dev libpng-dev libicu-dev libmcrypt-dev &&\
+		docker-php-ext-install pdo_mysql && \
+ 		docker-php-ext-install xmlrpc && \
+		docker-php-ext-install mbstring && \
+		docker-php-ext-install zip && \
+		docker-php-ext-install xml && \
+		docker-php-ext-install intl && \
+ 		docker-php-ext-install soap && \
+ 		docker-php-ext-install mcrypt && \
+		echo "Installing moodle" && \
+		wget https://download.moodle.org/download.php/direct/stable31/moodle-latest-31.tgz -O /tmp/moodle-latest-31.tgz  && \
 		rm -rf /var/www/html/index.html && \
-		mkdir /tmp/moodle && \
-		git clone -b MOODLE_31_STABLE git://git.moodle.org/moodle.git --depth=1 /tmp/moodle  && \
+		tar -xvf /tmp/moodle-latest-31.tgz -C /tmp && \
 		mv /tmp/moodle/* /var/www/html/
 
 COPY moodle-config.php /var/www/html/config.php
 
 
-RUN echo "Fixing Permissions" && \
- 		chown -R www-data:www-data /var/www/html && \
-		find /var/www/html -iname "*.php" | xargs chmod +x
-
 # Cleanup
 RUN apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/lib/dpkg/* /var/lib/cache/* /var/lib/log/*
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-CMD "apache -D FOREGROUND"
+CMD /usr/sbin/apache2ctl -D FOREGROUND
