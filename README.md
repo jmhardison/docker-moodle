@@ -35,6 +35,9 @@ You can visit the following URL in a browser to get started:
 http://0.0.0.0:8080
 
 ```
+Also you can use the following volumes:
+
+* **/var/moodledata** In order to get all the stored  data.
 
 ## Caveats
 The following aren't handled, considered, or need work:
