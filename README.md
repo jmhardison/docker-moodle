@@ -16,8 +16,8 @@ docker build -t moodle .
 To spawn a new instance of Moodle:
 
 ```
-docker run -d --name DB -p 3306:3306 -e MYSQL_DATABASE=moodle -e MYSQL_ROOT_PASSWORD=moodle -e MYSQL_USER=moodle -e MYSQL_PASSWORD=moodle mysql
-docker run -d -P --name moodle --link DB:DB -e MOODLE_URL=http://0.0.0.0:8080 -p 8080:80 jhardison/moodle
+docker run -d --name DB -e MYSQL_DATABASE=moodle -e MYSQL_ROOT_PASSWORD=moodle -e MYSQL_USER=moodle -e MYSQL_PASSWORD=moodle mysql
+docker run -d -P --name moodle --link DB:DB -e MOODLE_URL=http://0.0.0.0:8080 -p 8080:80 ellakcy/moodle
 ```
 
 Also you can use the following extra enviromental variables (using `-e` option on `docker run` command):
@@ -48,4 +48,3 @@ The following aren't handled, considered, or need work:
 ## Credits
 
 This is a fork of JmHardison  (https://github.com/jmhardison/docker-moodle)'s Dockerfile.
-
