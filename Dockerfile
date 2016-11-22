@@ -27,7 +27,7 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 
 RUN echo "Installing php and external tools"
 RUN apt-get update && \
-		apt-get -f -y install mysql-client pwgen aspell unzip wget libxmlrpc-c++8-dev libxml2-dev libpng-dev libicu-dev libmcrypt-dev &&\
+		apt-get -f -y install mysql-client pwgen unzip wget libxmlrpc-c++8-dev libxml2-dev libpng-dev libicu-dev libmcrypt-dev &&\
 		docker-php-ext-install mysqli && \
 		docker-php-ext-install pdo pdo_mysql && \
  		docker-php-ext-install xmlrpc && \
