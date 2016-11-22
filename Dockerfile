@@ -21,6 +21,13 @@ ENV MOODLE_ADMIN admin
 ENV MOODLE_ADMIN_PASSWORD Admin~1234
 ENV MOODLE_ADMIN_EMAIL admin@example.com
 
+ENV MOODLE_DB_TYPE 'mysqli'
+ENV MOODLE_DB_HOST ''
+ENV MOODLE_DB_PASSWORD ''
+ENV MOODLE_DB_USER ''
+ENV MOODLE_DB_NAME ''
+ENV MOODLE_DB_PORT ''
+
 ADD ./entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 

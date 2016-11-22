@@ -47,6 +47,8 @@ else
   exit 1
 fi
 
+
+
 echo "Installing moodle"
 php /var/www/html/admin/cli/install_database.php \
           --adminemail=${MOODLE_ADMIN_EMAIL} \
