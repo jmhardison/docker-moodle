@@ -1,7 +1,7 @@
 docker-moodle
 =============
 
-A Dockerfile that installs and runs the latest Moodle 3.1 stable, with external MySQL Database and automatic installation with a default predefined administrator user.
+A Docker image that installs and runs the latest Moodle 3.1 stable, with external MySQL/Mariadb Database and automatic installation with a default predefined administrator user.
 
 ## Installation
 
