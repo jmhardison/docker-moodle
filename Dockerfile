@@ -26,7 +26,7 @@ ENV MOODLE_DB_HOST ''
 ENV MOODLE_DB_PASSWORD ''
 ENV MOODLE_DB_USER ''
 ENV MOODLE_DB_NAME ''
-ENV MOODLE_DB_PORT ''
+ENV MOODLE_DB_PORT 3306
 
 ADD ./entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh

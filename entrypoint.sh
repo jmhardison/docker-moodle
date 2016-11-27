@@ -17,16 +17,17 @@ echo "Setting up database"
 if [ "$MOODLE_DB_TYPE" = "mysqli" ] || [ "$MOODLE_DB_TYPE" = "mariadb" ]; then
 
 : ${MOODLE_DB_HOST:=$DB_PORT_3306_TCP_ADDR}
+: ${MOODLE_DB_PORT:=${DB_PORT_3306_TCP_PORT}}
 
-  echo "Waiting for mysql to connect.."
-  while ! mysqladmin ping -h"$MOODLE_DB_HOST" --silent; do
+  echo "Waiting for mysql to start at ${MOODLE_DB_HOST} using port ${MOODLE_DB_PORT}..."
+  while ! mysqladmin ping -h"$MOODLE_DB_HOST" -P $MOODLE_DB_PORT --silent; do
+      echo "Connecting to ${MOODLE_DB_HOST} Failed"
       sleep 1
   done
 
   echo "Setting up the database connection info"
 : ${MOODLE_DB_USER:=${DB_ENV_MYSQL_USER:-root}}
 : ${MOODLE_DB_NAME:=${DB_ENV_MYSQL_DATABASE:-'moodle'}}
-: ${MOODLE_DB_PORT:=${DB_PORT_3306_TCP_PORT}}
 
   if [ "$MOODLE_DB_USER" = 'root' ]; then
 : ${MOODLE_DB_PASSWORD:=$DB_ENV_MYSQL_ROOT_PASSWORD}
