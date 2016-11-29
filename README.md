@@ -25,8 +25,15 @@ docker run -d -P --name moodle --link DB:DB -e MOODLE_URL=http://0.0.0.0:8080 -p
 * Using mariadb:
 
 ```
-docker run -d --name DB -e MYSQL_DATABASE=moodle -e MYSQL_RANDOM_ROOT_PASSWORD=yes -e MYSQL_ONETIME_PASSWORD=yes -e MYSQL_USER=moodle -e MYSQL_PASSWORD=moodle mariadb
+docker run -d --name DB -e MYSQL_DATABASE=^a database name^ -e MYSQL_RANDOM_ROOT_PASSWORD=yes -e MYSQL_ONETIME_PASSWORD=yes -e MYSQL_USER=^a database user^ -e MYSQL_PASSWORD=^a database password^ mariadb
 docker run -d -P --name moodle --link DB:DB -e MOODLE_URL=http://0.0.0.0:8080 -e MOODLE_DB_TYPE="mariadb" -p 8080:80 ellakcy/moodle
+```
+
+* Using postgresql
+
+```
+docker run --name=DB -e POSTGRES_USER=^a database user^ -e POSTGRES_PASSWORD=^a database password^ -e POSTGRES_DB=^a database name^ -d postgres
+docker run -d -P --name moodle --link DB:DB -e MOODLE_URL=http://0.0.0.0:8080 -e MOODLE_DB_TYPE="pgsql" -p 8080:80 ellakcy/moodle
 ```
 
 Then you can visit the following URL in a browser to get started:
@@ -49,7 +56,7 @@ Variable Name | Default value | Description
 * For database management:
 Variable Name | Default value | Description
 ---- | ------ | ------
-**MOODLE_DB_TYPE** | *mysqli* | The type of the database it can be either *mysqli* or *mariadb*
+**MOODLE_DB_TYPE** | *mysqli* | The type of the database it can be either *mysqli* or *mariadb* or *pgsql*
 **MOODLE_DB_HOST** | | The url that the database is accessible
 **MOODLE_DB_PASSWORD** | | The password for the database
 **MOODLE_DB_USER** | | The username of the database
