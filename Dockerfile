@@ -26,17 +26,18 @@ ENV MOODLE_DB_HOST ''
 ENV MOODLE_DB_PASSWORD ''
 ENV MOODLE_DB_USER ''
 ENV MOODLE_DB_NAME ''
-ENV MOODLE_DB_PORT 3306
+ENV MOODLE_DB_PORT ''
 
 ADD ./entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 
-RUN echo "Installing php and external tools"
+# Installing php and external tools
 RUN apt-get update && \
-		apt-get -f -y install mysql-client pwgen unzip wget libxmlrpc-c++8-dev libxml2-dev libpng-dev libicu-dev libmcrypt-dev &&\
+		apt-get -f -y install libghc-postgresql-simple-dev postgresql-client mysql-client pwgen unzip wget libxmlrpc-c++8-dev libxml2-dev libpng-dev libicu-dev libmcrypt-dev &&\
 		docker-php-ext-install mysqli && \
-		docker-php-ext-install pdo pdo_mysql && \
+		docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && \
+    docker-php-ext-install pgsql pdo pdo_mysql pdo_pgsql && \
  		docker-php-ext-install xmlrpc && \
 		docker-php-ext-install mbstring && \
 		docker-php-ext-install zip && \
